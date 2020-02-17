@@ -177,10 +177,10 @@ class Stock{
     if(this.price>this.ogPrice*2){
       this.split();
     }
-    //monthly dividend:
-    if(daysPassed%31==0){
+    //yearly dividend:
+    if(daysPassed%365==0){
       if(this.trend<0){
-        money-=(this.price*this.trend)*this.owned;
+        money-=((this.price*this.trend)*this.owned);
       }
     }
   }
@@ -263,7 +263,7 @@ function displayMoney(){
   noStroke();
   fill(10,255,10);
   textSize(text_size);
-  text("Balance: $"+truncDisp(money, 4), width/2,height/(text_size/2));
+  text("Balance: $"+money, width/2,height/(text_size/2));
 
 }
 function displayStocks(){
