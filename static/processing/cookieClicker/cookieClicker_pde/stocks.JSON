@@ -1,0 +1,35 @@
+stocks:[
+
+  NASDAQ:{
+    name:"NASDAQ",
+    start:9731.18
+  },
+  DOW_JONES:{
+    name:"Dow Jones",
+    start:29398.08
+  },
+  APPL{
+    name:"Apple inc.",
+    start:324.95
+  },
+  SBUX{
+    name:"Starbucks Coorperation",
+    start:89.28
+  },
+  NKE{
+    name:"Nike Coorperation",
+    start:103.54
+  },
+  TSLA{
+    name:"Tesla",
+    start:300.32
+  },
+  NVDA{
+    name:"NVIDIA Corporation"
+    start:289.79
+  }
+
+
+
+
+]
