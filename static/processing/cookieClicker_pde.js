@@ -47,8 +47,8 @@ var stockList =
 
   },
   {
-    name:"Beans 'n fixins Coorperation",
-    start:10.35
+    name:"Burger King inc.",
+    start:17.35
 
   },
   {
@@ -66,6 +66,38 @@ var stockList =
 
   }
 ];
+var altStockList = [
+
+  {
+    name:"Facebook Inc.",
+    start:214.18
+  },
+  {
+    name:"Toyota Motor Corp.",
+    start:140.15
+  },
+  {
+    name:"Twitter inc.",
+    start:36.91
+  },
+  {
+    name:"Walmart inc.",
+    start:117.89
+
+  },
+  {
+    name:"S&P 500 Index",
+    start:3380.16
+
+  },
+  {
+    name:"Alphabet Inc Class A",
+    start:1518.73
+
+  }
+
+]
+
 
 function remove_linebreaks( str ) {
     return str.replace( /[\r\n]+/gm, "" );
@@ -89,24 +121,27 @@ class Stock{
     this.bankrupt = false;
     this.hist = [];
     this.hist.push(this.price);
+    this.x=0;
+    this.y=0;
   }
 
   d(x,y){
-    y+=5;
-    this.x=x;
-    this.y=y;
+
+
     var w = width/5;
     var h = height/(12.5);
     this.w=w;
     this.h=h;
+    var dx = 50;
+    var dy = this.y;
     var mover = false;
     fill(0,25,0);
     strokeWeight(2);
     stroke(10,255,10);
-    if(mouseX>x&&mouseX<x+w&&mouseY>y&&mouseY<y+h){
+    if(mouseX>dx&&mouseX<dx+w&&mouseY>dy&&mouseY<dy+h){
       currentStock=this;
       textSize(15);
-      rect(x+10,y+10,2*(w/3)-20,h-20);
+      rect(dx+10,dy+10,2*(w/3)-20,h-20);
       if(money>this.price){
         fill(10,10,255);
         stroke(50,255,50);
@@ -114,10 +149,19 @@ class Stock{
         fill(255,10,10);
         stroke(255,10,10);
       }
-      text("Purchase",x+width/45,y+height/(stocks.length*3));
-      x+=2*(w/3);
+      text("Purchase",dx+width/45,dy+height/(stocks.length*3));
+      if(x<2*(w/3)){ //slide to the right animations
+        x+=15;
+      }
+
       mover=true;
+    }else{
+      if(x>50){
+        x-=15;
+      }
     }
+    this.x=x;
+    this.y=y;
     fill(0,25,0);
     strokeWeight(5);
     stroke(10,255,10);
@@ -149,7 +193,16 @@ class Stock{
   }
 
   tick(){
-    if(this.bankrupt){return;}
+    if(this.bankrupt){
+      //swap out for quarter
+      if(daysPassed%91 == 0){
+        var index = stocks.indexOf(this);
+        if (index !== -1) stocks[index] = swapStock();
+
+      }
+
+      return;
+    }
     this.price-=this.price*this.trend;
     this.hist.push(this.price);
 
@@ -185,9 +238,9 @@ class Stock{
     }
 
     if(this.name=="NASDAQ"){
-      this.trend = .0000001;
+      this.trend = -.0000001; //(negative means positive)
     }
-    
+
 
   }
 
@@ -255,6 +308,14 @@ function plot(stock){
 
 }
 
+function swapStock(){
+
+  var newstock = altStockList[int(random(0,altStockList.length))];
+  console.log(newstock);
+  var newstock = new Stock(newstock.name, newstock.start);
+  return newstock;
+
+}
 
 function loadStocks(){
   for(var i = 0 ; i < stockList.length;i++){
@@ -275,8 +336,11 @@ function displayMoney(){
 function displayStocks(){
 
   for(var i = 0 ; i < stocks.length;i++){
-
-    stocks[i].d(50,i*(height/(stocks.length)));
+    if(stocks[i].x==0&&stocks[i].y==0){
+      stocks[i].d(50,i*(height/(stocks.length)));
+    }else{
+      stocks[i].d(stocks[i].x,stocks[i].y);
+    }
   }
 
 
@@ -316,7 +380,7 @@ function setup() {
 }
 
 function sellButton(){
-
+  //sell 1
   var w = width/6;
   var h = height/12;
   var sx = width/2;
@@ -342,7 +406,7 @@ function sellButton(){
   text("Sell Shares", sx+20,sy+h/2);
 
   sx += w*1.2;
-
+  //sell all
   var extLight = 0;
   if(mouseX>sx&&mouseX<sx+w&&mouseY>sy&&mouseY<sy+h){
     extLight=25;
@@ -359,8 +423,7 @@ function sellButton(){
 
   rect(sx,sy,w,h);
   text("Sell All Shares", sx+20,sy+h/2);
-
-
+  //swap stock
 
 }
 
@@ -411,8 +474,9 @@ function mouseReleased(){
   }
 
   for(var i =0;i<stocks.length;i++){
-
-    if((mouseX>stocks[i].x&&mouseX<stocks[i].x+stocks[i].w&&mouseY>stocks[i].y&&mouseY<stocks[i].y+stocks[i].h)){
+    var x = 50;
+    var y = i*(height/(stocks.length));
+    if((mouseX>x&&mouseX<x+stocks[i].w&&mouseY>y&&mouseY<y+stocks[i].h)){
 
       if(money>stocks[i].price){
         stocks[i].owned++;
@@ -451,6 +515,9 @@ function labels(){
   strokeWeight(1);
   textSize(20);
   text("Days/second: "+dps, x,y);
+  y+=50;
+  text("Days Passed: "+daysPassed,x,y);
+  text("Quarters Passed: "+int((daysPassed/360)*4), x,y+25);
 
 
 }
