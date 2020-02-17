@@ -183,6 +183,12 @@ class Stock{
         money-=((this.price*this.trend)*this.owned);
       }
     }
+
+    if(this.name=="NASDAQ"){
+      this.trend = .0000001;
+    }
+    
+
   }
 
   split(){
