@@ -317,15 +317,17 @@ function nextDay(){
 
 }
 function mouseReleased(){
+  if(currentStock!=null){
+    var w = width/6;
+    var h = height/12;
+    var sx = width/2;
+    var sy = (height*(3/4))+10;
+    if(mouseX>sx&&mouseX<sx+w&&mouseY>sy&&mouseY<sy+h){
+      if(currentStock.owned>0){
+        currentStock.sell();
+      }
 
-  var w = width/6;
-  var h = height/12;
-  var sx = width/2;
-  var sy = (height*(3/4))+10;
-  if(mouseX>sx&&mouseX<sx+w&&mouseY>sy&&mouseY<sy+h){
-
-    currentStock.sell();
-
+    }
   }
 
 
