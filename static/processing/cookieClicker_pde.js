@@ -198,6 +198,12 @@ class Stock{
 
   }
 
+  sellOut(){
+
+    money+=this.price*this.owned;
+    this.owned=0;
+
+  }
 }
 
 function plot(stock){
@@ -270,6 +276,31 @@ function displayStocks(){
 
 }
 
+function freedomButton(){
+
+  var x = width-width/5 - 5;
+  var y = 5;
+  var w = width/5;
+  var h = height/5;
+
+  extLight=0;
+  if(mouseX>x&&mouseX<x+w&&mouseY>y&&mouseY<y+h){
+    extLight+=25;
+  }
+  if(money>=1500666.02){
+    fill(extLight,extLight+10,extLight);
+    stroke(extLight+10,255,extLight+10)
+
+  }else{
+    fill(extLight+10,0,extLight+10);
+    stroke(255,extLight+10,extLight+10);
+  }
+
+
+  rect(x,y,w,h);
+  text("Buy Freedom: $1,500,666.02", x+5,y+h/2);
+
+}
 
 function setup() {
 
@@ -304,6 +335,26 @@ function sellButton(){
   rect(sx,sy,w,h);
   text("Sell Shares", sx+20,sy+h/2);
 
+  sx += w*1.2;
+
+  var extLight = 0;
+  if(mouseX>sx&&mouseX<sx+w&&mouseY>sy&&mouseY<sy+h){
+    extLight=25;
+  }
+
+  if(currentStock.owned>0){
+    fill(extLight,extLight+10,extLight);
+    stroke(extLight+10,255,extLight+10)
+
+  }else{
+    fill(extLight+10,0,extLight+10);
+    stroke(255,extLight+10,extLight+10);
+  }
+
+  rect(sx,sy,w,h);
+  text("Sell All Shares", sx+20,sy+h/2);
+
+
 
 }
 
@@ -328,9 +379,30 @@ function mouseReleased(){
       }
 
     }
+
+    sx+=w*1.2;
+    if(mouseX>sx&&mouseX<sx+w&&mouseY>sy&&mouseY<sy+h){
+      if(currentStock.owned>0){
+        currentStock.sellOut();
+      }
+
+    }
   }
 
+  if(money>0/*1500666.02*/){
+    var x = width-width/5 - 5;
+    var y = 5;
+    var w = width/5;
+    var h = height/5;
+    if(mouseX>x&&mouseX<x+w&&mouseY>y&&mouseY<y+h){
 
+      alert("You Won!");
+      alert("Go away now");
+      window.location.href = "https://www.rd.com/wp-content/uploads/2017/10/These-Funny-Dog-Videos-Are-the-Break-You-Need-Right-Now_493370860-Jenn_C-760x506.jpg";
+
+
+    }
+  }
 
   for(var i =0;i<stocks.length;i++){
 
@@ -397,4 +469,5 @@ function draw() {
   plot(currentStock);
   autoDays();
   sellButton();
+  freedomButton();
 }
