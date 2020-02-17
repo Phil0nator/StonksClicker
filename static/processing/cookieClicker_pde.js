@@ -389,7 +389,7 @@ function mouseReleased(){
     }
   }
 
-  if(money>0/*1500666.02*/){
+  if(money>1500666.02){
     var x = width-width/5 - 5;
     var y = 5;
     var w = width/5;
